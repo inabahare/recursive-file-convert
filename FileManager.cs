@@ -18,7 +18,7 @@ namespace RecursiveFileConvert
     string removeFirstSpace(string extension) =>
       extension.Substring(1);
 
-    bool IsVideoFile(string filePath)
+    bool IsValidVideoFile(string filePath)
     {
 
       var extension =
@@ -38,7 +38,7 @@ namespace RecursiveFileConvert
       var files =
         Directory
           .GetFiles(Path, "*", SearchOption.AllDirectories)
-          .Where(IsVideoFile)
+          .Where(IsValidVideoFile)
           .ToList();
 
       return files;
