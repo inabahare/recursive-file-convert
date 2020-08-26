@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 
 namespace RecursiveFileConvert
 {
@@ -6,7 +8,15 @@ namespace RecursiveFileConvert
   {
     static void Main(string[] args)
     {
-      Console.WriteLine("Hello World!");
+      var path = "/home/inaba/Videos/Test";
+
+      var fileManager = new FileManager
+      {
+        Path = path
+      };
+
+      var files = fileManager.GetVideoFiles();
+      Console.WriteLine(files);
     }
   }
 }
