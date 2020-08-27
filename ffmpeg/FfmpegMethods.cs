@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace RecursiveFileConvert
+namespace VideoConvert
 {
-  public interface IFfmpeg
-  {
-    void Convert(string input, string output);
-  }
-  public class Ffmpeg : IFfmpeg
+  public partial class Ffmpeg : IFfmpeg
   {
     readonly List<string> Params = new List<string>();
 
