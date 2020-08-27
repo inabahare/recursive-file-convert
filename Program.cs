@@ -18,7 +18,13 @@ namespace RecursiveFileConvert
 
       var files = fileManager.GetVideoFiles();
 
-      var ffmpeg = new Ffmpeg();
+      var ffmpeg = new Ffmpeg
+      {
+        Preset = Preset.Medium,
+        Codec = "libx265",
+        Crf = 32,
+        FastStart = true
+      };
 
       ffmpeg.Convert("/home/inaba/Videos/test.webm", "/home/inaba/Videos/test.mp4");
 
