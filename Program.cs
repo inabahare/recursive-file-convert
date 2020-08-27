@@ -16,6 +16,11 @@ namespace RecursiveFileConvert
       };
 
       var files = fileManager.GetVideoFiles();
+
+      var ffmpeg = new Ffmpeg();
+
+      ffmpeg.Convert("/home/inaba/Videos/test.webm", "/home/inaba/Videos/test.mp4");
+
       Console.WriteLine(files);
     }
   }
