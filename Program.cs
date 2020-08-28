@@ -22,7 +22,7 @@ namespace RecursiveFileConvert
       {
         Preset = Preset.Medium,
         Codec = "libx265",
-        Crf = 32,
+        Crf = 28,
         FastStart = true
       };
 

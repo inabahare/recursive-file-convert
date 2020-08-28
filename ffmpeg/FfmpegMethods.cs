@@ -7,17 +7,20 @@ namespace VideoConvert
 {
   public partial class Ffmpeg : IFfmpeg
   {
-    readonly List<string> Params = new List<string>();
-
-    public Ffmpeg() { }
+    string FfmpegParams
+    {
+      get => $"{_codec} {_crf} {_preset} {_fastStart}";
+    }
 
     public void Convert(string input, string output)
     {
+      var ffmpegParams = FfmpegParams;
+
       var process = new Process
       {
         StartInfo = {
           FileName = "ffmpeg",
-          Arguments = $"-y -i {input} {output}",
+          Arguments = $"-y -i {input} {ffmpegParams} {output}",
           UseShellExecute = false,
           RedirectStandardOutput = true,
           RedirectStandardError = true
