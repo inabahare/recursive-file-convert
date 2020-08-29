@@ -33,12 +33,13 @@ namespace RecursiveFileConvert
       return VideoTypes.Contains(extensionNoSpace);
     }
 
-    public List<string> GetVideoFiles()
+    public List<FileName> GetVideoFiles()
     {
       var files =
         Directory
           .GetFiles(Path, "*", SearchOption.AllDirectories)
           .Where(IsValidVideoFile)
+          .Select(path => (FileName)path)
           .ToList();
 
       return files;
