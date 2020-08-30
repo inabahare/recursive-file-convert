@@ -32,10 +32,9 @@ namespace RecursiveFileConvert
         var tmpFile = file.Move($"{file.Name}.tmp");
 
         ffmpeg.Convert(tmpFile.ToString(),
-                       $"{file.FullPath}");
+                       file.ToString());
 
-        Console.WriteLine(file.ToString());
-
+        Console.WriteLine($"Finished: {file}");
       }
 
       Console.WriteLine(files);

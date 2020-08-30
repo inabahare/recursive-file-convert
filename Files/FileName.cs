@@ -23,11 +23,11 @@ namespace RecursiveFileConvert
     {
       var newPath = Path.Join(FullPath, $"{newName}{Extension}");
 
-      File.Move(this.ToString(), newPath);
+      File.Move(ToString(), newPath);
       return new FileName
       {
         FullPath = CopyString(FullPath),
-        Name = newPath,
+        Name = newName,
         Extension = CopyString(Extension)
       };
     }
