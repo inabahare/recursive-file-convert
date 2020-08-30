@@ -14,13 +14,11 @@ namespace VideoConvert
 
     public void Convert(string input, string output)
     {
-      var ffmpegParams = FfmpegParams;
-
       var process = new Process
       {
         StartInfo = {
           FileName = "ffmpeg",
-          Arguments = $"-y -i {input} {ffmpegParams} {output}",
+          Arguments = $"-i {input} {FfmpegParams} {output}",
           UseShellExecute = false,
           RedirectStandardOutput = true,
           RedirectStandardError = true
