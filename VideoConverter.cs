@@ -43,7 +43,7 @@ namespace RecursiveFileConvert
         ffmpeg.Convert(tmpFile.ToString(),
                        file.ToString());
 
-
+        tmpFile.Remove();
         Console.WriteLine($"Finished: {file}");
       }
     }

@@ -32,6 +32,11 @@ namespace RecursiveFileConvert
       };
     }
 
+    public void Remove()
+    {
+      File.Delete(this.ToString());
+    }
+
     public override string ToString()
     {
       return Path.Join(FullPath, $"{Name}{Extension}");
