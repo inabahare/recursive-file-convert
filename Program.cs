@@ -22,15 +22,21 @@ namespace RecursiveFileConvert
       {
         Preset = Preset.Medium,
         Codec = "libx265",
-        Crf = 28,
+        Crf = 30,
         FastStart = true
       };
 
+      foreach (var file in files)
+      {
+        // Move to a new name in case app crashes
+        var tmpFile = file.Move($"{file.Name}.tmp");
 
-      ffmpeg.Convert("/home/inaba/Videos/test.webm",
-                     "/home/inaba/Videos/test.mp4");
+        ffmpeg.Convert(tmpFile.ToString(),
+                       $"{file.FullPath}");
 
+        Console.WriteLine(file.ToString());
 
+      }
 
       Console.WriteLine(files);
     }
