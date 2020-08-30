@@ -9,35 +9,12 @@ namespace RecursiveFileConvert
   {
     static void Main(string[] args)
     {
-      var path = "/home/inaba/Videos/Test";
-
-      var fileManager = new FileManager
+      new VideoConverter
       {
-        Path = path
-      };
-
-      var files = fileManager.GetVideoFiles();
-
-      var ffmpeg = new Ffmpeg
-      {
-        Preset = Preset.Medium,
-        Codec = "libx265",
-        Crf = 30,
-        FastStart = true
-      };
-
-      foreach (var file in files)
-      {
-        // Move to a new name in case app crashes
-        var tmpFile = file.Move($"{file.Name}.tmp");
-
-        ffmpeg.Convert(tmpFile.ToString(),
-                       file.ToString());
-
-        Console.WriteLine($"Finished: {file}");
+        FilePath = "/home/inaba/Videos/Test"
       }
-
-      Console.WriteLine(files);
+      .Configure()
+      .Start();
     }
   }
 }
