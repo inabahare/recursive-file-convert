@@ -5,7 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace RecursiveFileConvert
 {
-  public class FileManager
+  public interface IFileManager
+  {
+    string Path { get; set; }
+    List<FileName> GetVideoFiles();
+  }
+
+  public class FileManager : IFileManager
   {
     readonly Regex ExtensionRegex = new Regex(@"\.\w*$");
 
