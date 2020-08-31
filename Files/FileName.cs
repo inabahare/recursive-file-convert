@@ -44,7 +44,7 @@ namespace RecursiveFileConvert
 
     public static explicit operator FileName(string fileString)
     {
-      var pathPatten = new Regex(@"\/(\w|\/)+\/");
+      var pathPatten = new Regex(@"\/.+\/");
       var namePattern = new Regex(@"(?<=\/)[^\/]+(?=\.)");
       var extensionPattern = new Regex(@"\.\w+$");
 
