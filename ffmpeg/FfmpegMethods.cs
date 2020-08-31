@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace VideoConvert
 {
@@ -18,7 +17,7 @@ namespace VideoConvert
       {
         StartInfo = {
           FileName = "ffmpeg",
-          Arguments = $"-i {input} {FfmpegParams} {output}",
+          Arguments = $"-i \"{input}\" {FfmpegParams} \"{output}\"",
           UseShellExecute = false,
           RedirectStandardOutput = true,
           RedirectStandardError = true
@@ -26,7 +25,16 @@ namespace VideoConvert
       };
 
       process.Start();
-      process.BeginOutputReadLine();
+
+      process.ErrorDataReceived +=
+        (sender, line) =>
+        {
+          if (line.Data != null)
+            Console.WriteLine(line.Data);
+        };
+
+
+      process.BeginErrorReadLine();
       process.WaitForExit();
     }
   }
