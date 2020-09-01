@@ -13,6 +13,8 @@ namespace VideoConvert
     Regex numberPattern = new Regex(@"\d+");
     Regex currentFramePattern = new Regex(@"frame=\s*\d+(?=(\sfps))");
 
+    public Action<double> OnPercentage { get; set; }
+
     string FfmpegParams
     {
       get => $"{_codec} {_crf} {_preset} {_fastStart}";
@@ -51,8 +53,7 @@ namespace VideoConvert
 
           var percentage = (currentFrame / frameCount) * 100;
 
-          Console.Clear();
-          Console.WriteLine($"{percentage}% {input}");
+          OnPercentage(percentage);
         }
       };
 

@@ -1,8 +1,11 @@
+using System;
+
 namespace VideoConvert
 {
   public interface IFfmpeg
   {
     void Convert(string input, string output);
+    Action<double> OnPercentage { get; set; }
 
     Preset Preset { get; set; }
     string Codec { get; set; }

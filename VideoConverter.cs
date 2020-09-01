@@ -20,7 +20,12 @@ namespace RecursiveFileConvert
         Preset = Preset.Medium,
         Codec = "libx265",
         Crf = 30,
-        FastStart = true
+        FastStart = true,
+        OnPercentage = percentage =>
+        {
+          Console.Clear();
+          Console.WriteLine($"{percentage.ToString("#.##")}%");
+        }
       };
 
       fileManager = new FileManager
