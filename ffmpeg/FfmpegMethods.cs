@@ -18,7 +18,7 @@ namespace VideoConvert
       get => $"{_codec} {_crf} {_preset} {_fastStart}";
     }
 
-    int GetFrameCount(string videoPath)
+    double GetFrameCount(string videoPath)
     {
       var stdOut = "";
       var command = new Command
@@ -33,7 +33,7 @@ namespace VideoConvert
       var frameCount = frameCountPattern.Match(stdOut).Value;
       var actualFrameCount = numberPattern.Match(frameCount).Value;
 
-      return int.Parse(actualFrameCount);
+      return double.Parse(actualFrameCount);
     }
 
     public void Convert(string input, string output)
@@ -47,10 +47,12 @@ namespace VideoConvert
           if (frame.Length == 0)
             return;
           var frameNumber = numberPattern.Match(frame).Value;
-          var currentFrame = int.Parse(frameNumber);
+          var currentFrame = double.Parse(frameNumber);
+
+          var percentage = (currentFrame / frameCount) * 100;
 
           Console.Clear();
-          Console.WriteLine($"{currentFrame}/{frameCount} {input}");
+          Console.WriteLine($"{percentage}% {input}");
         }
       };
 
