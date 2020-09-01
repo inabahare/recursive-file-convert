@@ -38,6 +38,7 @@ namespace Terminal
         }
       };
 
+      // This is actuallt StdOut?????????
       process.ErrorDataReceived +=
         (sender, line) => dataRecieved(line, OnStdErr);
 
