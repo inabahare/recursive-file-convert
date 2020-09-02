@@ -8,6 +8,7 @@ namespace RecursiveFileConvert
   public interface IFileManager
   {
     string Path { get; set; }
+    void SaveFile(string path);
     List<FileName> GetVideoFiles();
   }
 
@@ -37,6 +38,14 @@ namespace RecursiveFileConvert
       var extensionNoSpace = removeFirstSpace(extension.Value);
 
       return VideoTypes.Contains(extensionNoSpace);
+    }
+
+    public void SaveFile(string path)
+    {
+      using (var file = new StreamWriter(@"./converted", true))
+      {
+        file.WriteLine(path);
+      }
     }
 
     public List<FileName> GetVideoFiles()

@@ -49,6 +49,7 @@ namespace RecursiveFileConvert
                        file.ToString());
 
         tmpFile.Remove();
+        fileManager.SaveFile(file.ToString());
         Console.WriteLine($"Finished: {file}");
       }
     }

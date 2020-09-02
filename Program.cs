@@ -11,7 +11,7 @@ namespace RecursiveFileConvert
     {
       new VideoConverter
       {
-        FilePath = "/home/inaba/Videos/Test"
+        FilePath = "~/Videos/Test"
       }
       .Configure()
       .Start();
