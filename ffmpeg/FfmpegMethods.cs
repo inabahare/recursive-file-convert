@@ -22,20 +22,7 @@ namespace VideoConvert
 
     double GetFrameCount(string videoPath)
     {
-      var stdOut = "";
-      var command = new Command
-      {
-        OnStdErr =
-          data => stdOut += data
-      };
-
-      command.Run("ffmpeg", $"-i \"{videoPath}\" -map 0:v:0 -c copy -f null -");
-
-      // Can't use a negative lookbehind for this since space count keeps changing
-      var frameCount = frameCountPattern.Match(stdOut).Value;
-      var actualFrameCount = numberPattern.Match(frameCount).Value;
-
-      return double.Parse(actualFrameCount);
+      return double.Parse("1");
     }
 
     public void Convert(string input, string output)
