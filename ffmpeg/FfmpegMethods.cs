@@ -8,12 +8,13 @@ namespace VideoConvert
 {
   public partial class Ffmpeg : IFfmpeg
   {
-    Regex nbFrames = new Regex(@"(?<=(nb_frames\=))\d+");
-    Regex frameCountPattern = new Regex(@"frame=\s*\d+");
-    Regex numberPattern = new Regex(@"\d+");
-    Regex currentFramePattern = new Regex(@"frame=\s*\d+(?=(\sfps))");
+    /// <summary>
+    /// This catches the entire ffmpeg output string
+    /// </summary>
 
-    public Action<double> OnPercentage { get; set; }
+    Regex nbFrames = new Regex(@"(?<=(nb_frames\=))\d+");
+
+    public Action<double> OnProgress { get; set; }
 
     string FfmpegParams
     {
@@ -28,19 +29,18 @@ namespace VideoConvert
     public void Convert(string input, string output)
     {
       var frameCount = GetFrameCount(input);
+      var outputFormatter = new OutputFormatter();
+
       var command = new Command
       {
         OnStdErr = data =>
         {
-          var frame = currentFramePattern.Match(data).Value;
-          if (frame.Length == 0)
-            return;
-          var frameNumber = numberPattern.Match(frame).Value;
-          var currentFrame = double.Parse(frameNumber);
+          // var ffmpegOutput = FullFfmpegOutput.Match(data);
+          var output = outputFormatter.Format(data);
 
-          var percentage = (currentFrame / frameCount) * 100;
+          Console.WriteLine($"\tFrame={output.Frame}");
 
-          OnPercentage(percentage);
+          OnProgress(100);
         }
       };
 
