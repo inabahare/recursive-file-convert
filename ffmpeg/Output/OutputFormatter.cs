@@ -6,7 +6,6 @@ namespace VideoConvert
 {
   public class OutputFormatter
   {
-    readonly static string NumberPattern = @"\d+(\.\d+)?";
     readonly static string HhMmSs = @"(\d\d:\d\d:\d\d\.\d\d)";
 
     readonly static string FramePattern = @"(frame=\s*\d+)";
@@ -49,7 +48,6 @@ namespace VideoConvert
           .Trim();
 
       Output.Duration = TimeSpan.Parse(match);
-      Console.WriteLine("Duration set!");
     }
 
     double CalculatePercentage(TimeSpan howMuch, TimeSpan outOf) =>
@@ -66,7 +64,6 @@ namespace VideoConvert
       Output.Time = GetValue<TimeSpan>(data, "Time");
 
       Output.Percentage = CalculatePercentage(Output.Time, Output.Duration);
-      // TODO: Calculate percentge here
     }
 
     public FfmpegOutput Format(string data)

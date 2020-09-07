@@ -58,13 +58,8 @@ namespace RecursiveFileConvert
       return VideoTypes.Contains(extensionNoSpace);
     }
 
-    bool IsNotAlreadyConverted(string filePath)
-    {
-      if (!AlreadySavedVideos.Contains(filePath))
-        Console.WriteLine($"Skipping {filePath}");
-
-      return !AlreadySavedVideos.Contains(filePath);
-    }
+    bool IsNotAlreadyConverted(string filePath) =>
+      !AlreadySavedVideos.Contains(filePath);
 
     public List<FileName> GetVideoFilesToConvert()
     {
