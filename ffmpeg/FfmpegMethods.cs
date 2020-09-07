@@ -14,7 +14,7 @@ namespace VideoConvert
 
     Regex nbFrames = new Regex(@"(?<=(nb_frames\=))\d+");
 
-    public Action<double> OnProgress { get; set; }
+    public Action<FfmpegOutput> OnProgress { get; set; }
 
     string FfmpegParams
     {
@@ -35,12 +35,8 @@ namespace VideoConvert
       {
         OnStdErr = data =>
         {
-          // var ffmpegOutput = FullFfmpegOutput.Match(data);
           var output = outputFormatter.Format(data);
-
-          Console.WriteLine($"\tFrame={output.Frame}");
-
-          OnProgress(100);
+          OnProgress(output);
         }
       };
 

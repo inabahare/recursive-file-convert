@@ -21,10 +21,10 @@ namespace RecursiveFileConvert
         Codec = "libx265",
         Crf = 30,
         FastStart = true,
-        OnProgress = percentage =>
+        OnProgress = output =>
         {
           Console.Clear();
-          Console.WriteLine($"{percentage.ToString("#.##")}%");
+          Console.WriteLine($"{output.Percentage.ToString("#.##")}%");
         }
       };
 

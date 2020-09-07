@@ -23,6 +23,7 @@ namespace RecursiveFileConvert
     {
       var newPath = Path.Join(FullPath, $"{newName}{Extension}");
 
+      // TODO: This "Commando (1985) (1080p BluRay x265 HEVC 10bit DTS 5.1 Qman) [UTR]/Commando (1985).mkv" throws exception
       File.Move(ToString(), newPath);
       return new FileName
       {

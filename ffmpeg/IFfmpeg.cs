@@ -5,7 +5,7 @@ namespace VideoConvert
   public interface IFfmpeg
   {
     void Convert(string input, string output);
-    Action<double> OnProgress { get; set; }
+    Action<FfmpegOutput> OnProgress { get; set; }
 
     Preset Preset { get; set; }
     string Codec { get; set; }

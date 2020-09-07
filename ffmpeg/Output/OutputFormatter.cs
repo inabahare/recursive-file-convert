@@ -49,9 +49,11 @@ namespace VideoConvert
           .Trim();
 
       Output.Duration = TimeSpan.Parse(match);
+      Console.WriteLine("Duration set!");
     }
 
-
+    double CalculatePercentage(TimeSpan howMuch, TimeSpan outOf) =>
+      (howMuch.TotalMilliseconds / outOf.TotalMilliseconds) * 100;
 
     void HandleProcessing(string data)
     {
@@ -63,6 +65,7 @@ namespace VideoConvert
       Output.Speed = GetValue<double>(data, "Speed");
       Output.Time = GetValue<TimeSpan>(data, "Time");
 
+      Output.Percentage = CalculatePercentage(Output.Time, Output.Duration);
       // TODO: Calculate percentge here
     }
 
