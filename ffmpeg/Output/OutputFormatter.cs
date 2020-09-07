@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using RecursiveFileConvert;
 
 namespace VideoConvert
 {
@@ -18,6 +19,11 @@ namespace VideoConvert
 
     readonly Regex FullFfmpegOutput = new Regex($"{FramePattern}\\s{FpsPattern}\\s{QPattern}\\s{SizePattern}\\s{TimePattern}\\s{BitratePattern}\\s{SpeedPattern}");
     readonly Regex DurationPattern = new Regex($"(?<=Duration:\\s){HhMmSs}");
+
+    public OutputFormatter(FileName file)
+    {
+      Output.File = file;
+    }
 
     Regex GenerateKeyRegex(string key) =>
       new Regex($"(?<={key.ToLower()}\\=)\\s*(((\\d\\d\\:){{2}}\\d\\d\\.\\d\\d)|((\\-)?(\\d+(\\.\\d+)?)))");

@@ -1,9 +1,11 @@
 using System;
+using RecursiveFileConvert;
 
 namespace VideoConvert
 {
   public class FfmpegOutput
   {
+    public FileName File { get; set; }
     public double Percentage { get; set; }
     public int Frame { get; set; }
     /// <summary>

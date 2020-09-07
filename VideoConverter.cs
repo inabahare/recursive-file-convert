@@ -12,6 +12,11 @@ namespace RecursiveFileConvert
     IFfmpeg ffmpeg;
     IFileManager fileManager;
 
+    void OnProgress(FfmpegOutput output)
+    {
+      Console.Clear();
+      Console.WriteLine($"{output.Percentage.ToString("#.##")}%");
+    }
 
     public VideoConverter Configure()
     {
@@ -21,11 +26,7 @@ namespace RecursiveFileConvert
         Codec = "libx265",
         Crf = 30,
         FastStart = true,
-        OnProgress = output =>
-        {
-          Console.Clear();
-          Console.WriteLine($"{output.Percentage.ToString("#.##")}%");
-        }
+        OnProgress = OnProgress
       };
 
       fileManager = new FileManager
@@ -45,8 +46,8 @@ namespace RecursiveFileConvert
         // Move to a new name in case app crashes
         var tmpFile = file.Move($"{file.Name}.tmp");
         file.Extension = ".mp4";
-        ffmpeg.Convert(tmpFile.ToString(),
-                       file.ToString());
+        ffmpeg.Convert(tmpFile,
+                       file);
 
         tmpFile.Remove();
         fileManager.SaveFile(file.ToString());

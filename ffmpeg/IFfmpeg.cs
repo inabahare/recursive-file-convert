@@ -1,10 +1,11 @@
 using System;
+using RecursiveFileConvert;
 
 namespace VideoConvert
 {
   public interface IFfmpeg
   {
-    void Convert(string input, string output);
+    void Convert(FileName input, FileName output);
     Action<FfmpegOutput> OnProgress { get; set; }
 
     Preset Preset { get; set; }

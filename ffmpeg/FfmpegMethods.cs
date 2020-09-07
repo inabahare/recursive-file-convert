@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using RecursiveFileConvert;
 using Terminal;
 
 namespace VideoConvert
@@ -26,10 +27,10 @@ namespace VideoConvert
       return double.Parse("1");
     }
 
-    public void Convert(string input, string output)
+    public void Convert(FileName input, FileName output)
     {
-      var frameCount = GetFrameCount(input);
-      var outputFormatter = new OutputFormatter();
+      var frameCount = GetFrameCount(input.ToString());
+      var outputFormatter = new OutputFormatter(output);
 
       var command = new Command
       {
