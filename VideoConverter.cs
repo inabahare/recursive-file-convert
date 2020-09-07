@@ -38,7 +38,7 @@ namespace RecursiveFileConvert
 
     public void Start()
     {
-      var files = fileManager.GetVideoFiles();
+      var files = fileManager.GetVideoFilesToConvert();
 
       foreach (var file in files)
       {

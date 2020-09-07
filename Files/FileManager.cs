@@ -9,7 +9,7 @@ namespace RecursiveFileConvert
   {
     string Path { get; set; }
     void SaveFile(string path);
-    List<FileName> GetVideoFiles();
+    List<FileName> GetVideoFilesToConvert();
   }
 
   public class FileManager : IFileManager
@@ -27,7 +27,6 @@ namespace RecursiveFileConvert
 
     bool IsValidVideoFile(string filePath)
     {
-
       var extension =
         ExtensionRegex
           .Match(filePath);
@@ -48,7 +47,7 @@ namespace RecursiveFileConvert
       }
     }
 
-    public List<FileName> GetVideoFiles()
+    public List<FileName> GetVideoFilesToConvert()
     {
       var files =
         Directory
