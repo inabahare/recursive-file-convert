@@ -22,7 +22,7 @@ namespace RecursiveFileConvert
       if (output.Percentage.CompareTo(0) == 0)
         return;
 
-      userInterface.PrintTmp($"{Count++} {output.File.Name} {output.Percentage.ToString("N2")}%");
+      userInterface.PrintTmp($"{Count} {output.File.Name} {output.Percentage.ToString("N2")}%");
     }
 
     public VideoConverter Configure()
@@ -62,6 +62,7 @@ namespace RecursiveFileConvert
 
         tmpFile.Remove();
         fileManager.SaveFile(file.ToString());
+        Count++;
         userInterface.PrintPermanent($"Finished: {file}");
       }
 
