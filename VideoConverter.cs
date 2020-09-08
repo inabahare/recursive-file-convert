@@ -48,6 +48,8 @@ namespace RecursiveFileConvert
     {
       var files = fileManager.GetVideoFilesToConvert();
 
+      userInterface.PrintPermanent($"Converting {files.Count} files");
+
       foreach (var file in files)
       {
         // Move to a new name in case app crashes
