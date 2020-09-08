@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using VideoConvert;
+using VideoConvert.Ui;
 
 namespace RecursiveFileConvert
 {
@@ -11,11 +12,15 @@ namespace RecursiveFileConvert
 
     IFfmpeg ffmpeg;
     IFileManager fileManager;
+    IUserInterface userInterface;
 
     void OnProgress(FfmpegOutput output)
     {
-      Console.Clear();
-      Console.WriteLine($"{output.Percentage.ToString("#.##")}%");
+      // Don't print 0%;
+      if (output.Percentage.CompareTo(0) == 0)
+        return;
+
+      userInterface.PrintTmp($"Converting {output.File.Name} {output.Percentage.ToString("N2")}%");
     }
 
     public VideoConverter Configure()
@@ -24,7 +29,7 @@ namespace RecursiveFileConvert
       {
         Preset = Preset.Medium,
         Codec = "libx265",
-        Crf = 30,
+        Crf = 28,
         FastStart = true,
         OnProgress = OnProgress
       };
@@ -33,6 +38,8 @@ namespace RecursiveFileConvert
       {
         Path = FilePath
       };
+
+      userInterface = new UserInterface();
 
       return this;
     }
@@ -51,7 +58,7 @@ namespace RecursiveFileConvert
 
         tmpFile.Remove();
         fileManager.SaveFile(file.ToString());
-        Console.WriteLine($"Finished: {file}");
+        userInterface.PrintPermanent($"Finished: {file}");
       }
     }
   }

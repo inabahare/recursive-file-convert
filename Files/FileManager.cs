@@ -9,7 +9,7 @@ namespace RecursiveFileConvert
   public interface IFileManager
   {
     string Path { get; set; }
-    List<string> AlreadySavedVideos { get; set; }
+    List<string> Converted { get; set; }
     void SaveFile(string path);
     List<FileName> GetVideoFilesToConvert();
 
@@ -24,7 +24,7 @@ namespace RecursiveFileConvert
     };
 
     public string Path { get; set; }
-    public List<string> AlreadySavedVideos { get; set; }
+    public List<string> Converted { get; set; }
 
     void GetAlreadySavedVideos()
     {
@@ -32,7 +32,7 @@ namespace RecursiveFileConvert
       {
         var contents = file.ReadToEnd();
         var list = contents.Split("\n").ToList();
-        AlreadySavedVideos = list;
+        Converted = list;
       }
     }
 
@@ -59,7 +59,7 @@ namespace RecursiveFileConvert
     }
 
     bool IsNotAlreadyConverted(string filePath) =>
-      !AlreadySavedVideos.Contains(filePath);
+      !Converted.Contains(filePath);
 
     public List<FileName> GetVideoFilesToConvert()
     {
@@ -76,7 +76,7 @@ namespace RecursiveFileConvert
 
     public void SaveFile(string filePath)
     {
-      AlreadySavedVideos.Add(filePath);
+      Converted.Add(filePath);
       using (var file = new StreamWriter(@"./converted", true))
         file.WriteLine(filePath);
     }
