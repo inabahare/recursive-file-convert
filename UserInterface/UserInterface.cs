@@ -16,7 +16,7 @@ namespace VideoConvert.Ui
     public void PrintPermanent(string value)
     {
       Print(value);
-      Storage += $"\n{value}";
+      Storage += $"{value}\n";
     }
 
 

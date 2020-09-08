@@ -14,13 +14,15 @@ namespace RecursiveFileConvert
     IFileManager fileManager;
     IUserInterface userInterface;
 
+    int Count { get; set; } = 0;
+
     void OnProgress(FfmpegOutput output)
     {
       // Don't print 0%;
       if (output.Percentage.CompareTo(0) == 0)
         return;
 
-      userInterface.PrintTmp($"Converting {output.File.Name} {output.Percentage.ToString("N2")}%");
+      userInterface.PrintTmp($"{Count++} {output.File.Name} {output.Percentage.ToString("N2")}%");
     }
 
     public VideoConverter Configure()
@@ -62,6 +64,8 @@ namespace RecursiveFileConvert
         fileManager.SaveFile(file.ToString());
         userInterface.PrintPermanent($"Finished: {file}");
       }
+
+      userInterface.PrintPermanent("Done!");
     }
   }
 }
