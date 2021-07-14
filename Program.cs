@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using FFMpegCore;
 using FFMpegCore.Enums;
 
@@ -7,7 +8,7 @@ namespace recursive_file_convert
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var path = "/home/inaba/Videos/TV Shorts";
             
@@ -20,18 +21,19 @@ namespace recursive_file_convert
 
                 var tmpName = $"{directoryName}/{name}.temp{extension}";
 
-                FFMpegArguments
-                    .FromFileInput(file.FullName)
-                    .OutputToFile(tmpName, false, options => options
-                        .WithVideoCodec("libx265")
-                        .WithConstantRateFactor(28)
-                        .WithFastStart()
-                    )
-                    .NotifyOnProgress(onTimeProgress => Console.WriteLine(onTimeProgress))
-                    .ProcessSynchronously();
+                await Ffmpeg.Convert(
+                    file.FullName, 
+                    tmpName,
+                    progress => {
+                        Console.Clear();
+                        Console.WriteLine(progress);
+                    }
+                );
             }
 
             Console.WriteLine("Hello World!");
         }
+
+
     }
 }
