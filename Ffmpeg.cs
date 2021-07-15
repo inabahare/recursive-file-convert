@@ -9,9 +9,11 @@ namespace recursive_file_convert
   class Ffmpeg
   {
     public static async Task Convert(string input,
-                                        string output,
-                                        Action<TimeSpan> onProgress)
+                                     string output,
+                                     Action<TimeSpan, TimeSpan> onProgress)
     {
+      var info = await FFProbe.AnalyseAsync(input);
+
       await FFMpegArguments
           .FromFileInput(input)
           .OutputToFile(output, true, options => options
@@ -19,7 +21,7 @@ namespace recursive_file_convert
               .WithConstantRateFactor(28)
               .WithFastStart()
           )
-          .NotifyOnProgress(onProgress)
+          .NotifyOnProgress(progress => onProgress(progress, info.Duration))
           .ProcessAsynchronously();
     }
   }
