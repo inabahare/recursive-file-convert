@@ -33,13 +33,17 @@ namespace recursive_file_convert
       var converted = new List<string>();
       var path = "/home/inaba/Videos/TV Shorts";
       var files = new DirectoryInfo(path).GetFiles();
-
+      var extensionsToKeep = new List<string> {
+        ".mp4",
+        ".mkv"
+      };
 
       foreach (var file in files)
       {
         var name = Path.GetFileNameWithoutExtension(file.Name);
         var directoryName = file.DirectoryName;
-        var extension = file.Extension;
+        var extension =
+          extensionsToKeep.Contains(file.Extension) ? file.Extension : ".mp4";
 
         var tmpName = $"{directoryName}/{name}.temp{extension}";
 
@@ -60,8 +64,8 @@ namespace recursive_file_convert
 
         converted.Add(file.FullName);
 
-        // File.Delete(file.FullName);
         File.Move(tmpName, file.FullName, true);
+        // File.Delete(file.FullName);
       }
 
 
