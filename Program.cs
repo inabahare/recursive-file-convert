@@ -10,6 +10,17 @@ namespace recursive_file_convert
 {
   class Program
   {
+    static void PrintConverted(List<string> converted)
+    {
+      Console.Clear();
+
+      var alreadyConverted = "";
+      for (var i = 0; i < converted.Count; i++)
+        alreadyConverted += $"{i + 1} - {converted[i]}\n";
+
+      Console.WriteLine($"Converted:\n{alreadyConverted}\nConverting:\n");
+    }
+
     static async Task Main(string[] args)
     {
       var converted = new List<string>();
@@ -25,23 +36,20 @@ namespace recursive_file_convert
 
         var tmpName = $"{directoryName}/{name}.temp{extension}";
 
+        PrintConverted(converted);
+
         await Ffmpeg.Convert(
           file.FullName,
           tmpName,
           (progress, totalTime) =>
           {
-            Console.Clear();
-            var alreadyConverted = "";
-            for (var i = 0; i < converted.Count; i++)
-              alreadyConverted += $"{i + 1} - {converted[i]}\n";
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
 
             var convertedPercentage = (progress / totalTime) * 100;
-
             var converting = $"{file.FullName} - {convertedPercentage.ToString("0.00")}% - {progress}";
-
-            var result = $"Converted:\n{alreadyConverted}\n\nConverting:\n{converting}";
-
-            Console.WriteLine(result);
+            Console.WriteLine(converting);
           }
         );
 
