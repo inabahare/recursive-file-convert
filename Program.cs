@@ -59,6 +59,9 @@ namespace recursive_file_convert
         );
 
         converted.Add(file.FullName);
+
+        // File.Delete(file.FullName);
+        File.Move(tmpName, file.FullName, true);
       }
 
 
