@@ -21,6 +21,13 @@ namespace recursive_file_convert
       Console.WriteLine($"Converted:\n{alreadyConverted}\nConverting:\n");
     }
 
+    static void ClearCurrentLine()
+    {
+      Console.SetCursorPosition(0, Console.CursorTop - 1);
+      Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
+      Console.SetCursorPosition(0, Console.CursorTop - 1);
+    }
+
     static async Task Main(string[] args)
     {
       var converted = new List<string>();
@@ -43,9 +50,7 @@ namespace recursive_file_convert
           tmpName,
           (progress, totalTime) =>
           {
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            ClearCurrentLine();
 
             var convertedPercentage = (progress / totalTime) * 100;
             var converting = $"{file.FullName} - {convertedPercentage.ToString("0.00")}% - {progress}";
@@ -55,6 +60,7 @@ namespace recursive_file_convert
 
         converted.Add(file.FullName);
       }
+
 
       Console.WriteLine("Hello World!");
     }
