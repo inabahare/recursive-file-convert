@@ -30,15 +30,19 @@ namespace recursive_file_convert
 
     static async Task Main(string[] args)
     {
-      var convertedPath = "/home/inaba/converted.txt";
-      var videoPath = "/home/inaba/Videos/TV Shorts";
-
-      var converted = new List<string>();
-      var files = new DirectoryInfo(videoPath).GetFiles();
       var extensionsToKeep = new List<string> {
         ".mp4",
         ".mkv"
       };
+
+      var convertedPath = "/home/inaba/converted.txt";
+      var videoPath = "/home/inaba/Videos/TV Shorts";
+
+      var converted = (await File.ReadAllLinesAsync(convertedPath)).ToList();
+      var files =
+        new DirectoryInfo(videoPath)
+          .GetFiles()
+          .Where(file => !converted.Contains(file.FullName));
 
       foreach (var file in files)
       {
