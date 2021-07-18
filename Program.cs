@@ -23,20 +23,41 @@ namespace recursive_file_convert
 
     static void ClearCurrentLine()
     {
-      Console.SetCursorPosition(0, Console.CursorTop - 1);
+      // Console.SetCursorPosition(0, Console.CursorTop - 1);
       Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
-      Console.SetCursorPosition(0, Console.CursorTop - 1);
+      // Console.SetCursorPosition(0, Console.CursorTop - 1);
+    }
+
+    static Dictionary<string, string> ParseArgs(string[] args)
+    {
+      var res = new Dictionary<string, string>();
+
+      // Step through every second 
+      for (var i = 0; i < args.Length; i += 2)
+      {
+        var arg = args[i].Replace("--", "");
+
+        if (i + 1 > args.Length)
+          throw new Exception($"Could not find a value for {arg}");
+
+        var value = args[i + 1];
+        res.Add(arg, value);
+      }
+
+      return res;
     }
 
     static async Task Main(string[] args)
     {
+      var parsedArgs = ParseArgs(args);
+
       var extensionsToKeep = new List<string> {
         ".mp4",
         ".mkv"
       };
 
-      var convertedPath = "/home/inaba/converted.txt";
-      var videoPath = "/home/inaba/Videos/TV Shorts";
+      var videoPath = parsedArgs["location"];
+      var convertedPath = parsedArgs["list"] ?? Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "converted.txt");
 
       var converted = (await File.ReadAllLinesAsync(convertedPath)).ToList();
       var files =
