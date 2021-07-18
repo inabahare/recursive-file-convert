@@ -42,18 +42,20 @@ namespace recursive_file_convert
       var files =
         new DirectoryInfo(videoPath)
           .GetFiles()
+          .Where(file => !file.Name.Contains(".tmp"))
           .Where(file => !converted.Contains(file.FullName));
 
       foreach (var file in files)
       {
+        PrintConverted(converted);
+
         var name = Path.GetFileNameWithoutExtension(file.Name);
         var directoryName = file.DirectoryName;
         var extension =
           extensionsToKeep.Contains(file.Extension) ? file.Extension : ".mp4";
 
-        var tmpName = $"{directoryName}/{name}.temp{extension}";
-
-        PrintConverted(converted);
+        var tmpName = $"{directoryName}/{name}.tmp{extension}";
+        var newName = $"{directoryName}/{name}{extension}";
 
         await Ffmpeg.Convert(
           file.FullName,
@@ -70,7 +72,7 @@ namespace recursive_file_convert
 
         converted.Add(file.FullName);
 
-        File.Move(tmpName, file.FullName, true);
+        File.Move(tmpName, newName, true);
       }
 
       await File.WriteAllLinesAsync(convertedPath, converted);
