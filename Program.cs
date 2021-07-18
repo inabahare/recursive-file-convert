@@ -30,9 +30,11 @@ namespace recursive_file_convert
 
     static async Task Main(string[] args)
     {
+      var convertedPath = "/home/inaba/converted.txt";
+      var videoPath = "/home/inaba/Videos/TV Shorts";
+
       var converted = new List<string>();
-      var path = "/home/inaba/Videos/TV Shorts";
-      var files = new DirectoryInfo(path).GetFiles();
+      var files = new DirectoryInfo(videoPath).GetFiles();
       var extensionsToKeep = new List<string> {
         ".mp4",
         ".mkv"
@@ -65,11 +67,9 @@ namespace recursive_file_convert
         converted.Add(file.FullName);
 
         File.Move(tmpName, file.FullName, true);
-        // File.Delete(file.FullName);
       }
 
-
-      Console.WriteLine("Hello World!");
+      await File.WriteAllLinesAsync(convertedPath, converted);
     }
   }
 }
