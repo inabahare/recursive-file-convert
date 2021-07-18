@@ -71,7 +71,8 @@ namespace recursive_file_convert
         );
 
         converted.Add(file.FullName);
-
+        // Because if it's not part of the extensions to keep it should be removed
+        File.Delete(file.FullName);
         File.Move(tmpName, newName, true);
       }
 
