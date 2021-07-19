@@ -23,13 +23,16 @@ namespace recursive_file_convert
 
     static void ClearCurrentLine()
     {
-#if DEBUG
-      Console.SetCursorPosition(0, Console.CursorTop - 1);
-#endif
+      var debug = Environment.GetEnvironmentVariable("DEBUG");
+
+
+      if (debug != "true")
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
+
       Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
-#if DEBUG
-      Console.SetCursorPosition(0, Console.CursorTop - 1);
-#endif
+
+      if (debug != "true")
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
 
     static Dictionary<string, string> ParseArgs(string[] args)
@@ -85,7 +88,11 @@ namespace recursive_file_convert
       var videoPath = parsedArgs["dir"];
       var convertedPath = parsedArgs["list"] ?? Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "converted.txt");
 
-      var converted = (await File.ReadAllLinesAsync(convertedPath)).ToList();
+      var converted =
+        File.Exists(convertedPath) ?
+          (await File.ReadAllLinesAsync(convertedPath)).ToList() :
+          new List<string>();
+
       var files =
         new DirectoryInfo(videoPath)
           .GetFiles()
