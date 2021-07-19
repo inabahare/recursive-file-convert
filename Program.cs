@@ -70,6 +70,11 @@ namespace recursive_file_convert
       }
     }
 
+    static void OnQuit(object sender, ConsoleCancelEventArgs args)
+    {
+      Console.WriteLine("Quit");
+    }
+
     static async Task Main(string[] args)
     {
       if (args.Contains("--help"))
@@ -77,6 +82,8 @@ namespace recursive_file_convert
         PrintHelp();
         return;
       }
+
+      Console.CancelKeyPress += OnQuit;
 
       var parsedArgs = ParseArgs(args);
 
