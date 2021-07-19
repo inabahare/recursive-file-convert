@@ -23,9 +23,13 @@ namespace recursive_file_convert
 
     static void ClearCurrentLine()
     {
-      // Console.SetCursorPosition(0, Console.CursorTop - 1);
+#if DEBUG
+      Console.SetCursorPosition(0, Console.CursorTop - 1);
+#endif
       Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
-      // Console.SetCursorPosition(0, Console.CursorTop - 1);
+#if DEBUG
+      Console.SetCursorPosition(0, Console.CursorTop - 1);
+#endif
     }
 
     static Dictionary<string, string> ParseArgs(string[] args)
