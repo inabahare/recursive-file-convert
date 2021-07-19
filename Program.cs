@@ -47,8 +47,30 @@ namespace recursive_file_convert
       return res;
     }
 
+    static void PrintHelp()
+    {
+      var args = new Dictionary<string, string> {
+        { "help", "Show this message" },
+        { "location", "The directory for the files to convert"},
+        { "list", "Where the list of converted files are stored"},
+      };
+
+      foreach (var arg in args)
+      {
+        Console.WriteLine($"--{arg.Key}");
+        Console.WriteLine(arg.Value);
+        Console.WriteLine();
+      }
+    }
+
     static async Task Main(string[] args)
     {
+      if (args.Contains("--help"))
+      {
+        PrintHelp();
+        return;
+      }
+
       var parsedArgs = ParseArgs(args);
 
       var extensionsToKeep = new List<string> {
