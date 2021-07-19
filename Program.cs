@@ -51,7 +51,7 @@ namespace recursive_file_convert
     {
       var args = new Dictionary<string, string> {
         { "help", "Show this message" },
-        { "location", "The directory for the files to convert"},
+        { "dir", "The directory for the files to convert"},
         { "list", "Where the list of converted files are stored"},
       };
 
@@ -78,7 +78,7 @@ namespace recursive_file_convert
         ".mkv"
       };
 
-      var videoPath = parsedArgs["location"];
+      var videoPath = parsedArgs["dir"];
       var convertedPath = parsedArgs["list"] ?? Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "converted.txt");
 
       var converted = (await File.ReadAllLinesAsync(convertedPath)).ToList();
