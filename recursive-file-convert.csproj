@@ -4,6 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>recursive_file_convert</RootNamespace>
+    <DebugType>None</DebugType>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RunTimeIdentifier>linux-x64</RunTimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
