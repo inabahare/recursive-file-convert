@@ -21,19 +21,14 @@ namespace recursive_file_convert
       Console.WriteLine($"Converted:\n{alreadyConverted}\nConverting:\n");
     }
 
-    static void ClearCurrentLine()
-    {
-      var debug = Environment.GetEnvironmentVariable("DEBUG");
+    // List of extensions that don't get converted to MP4
+    // If th file is not any of these it will be converted to MP4
+    static List<string> ExtensionsToKeep { get; } = new List<string> {
+        ".mp4",
+        ".mkv"
+    };
 
-
-      if (debug != "true")
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-
-      Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
-
-      if (debug != "true")
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-    }
+    static List<string> Converted { get; set; }
 
     static Dictionary<string, string> ParseArgs(string[] args)
     {
@@ -87,33 +82,30 @@ namespace recursive_file_convert
 
       var parsedArgs = ParseArgs(args);
 
-      var extensionsToKeep = new List<string> {
-        ".mp4",
-        ".mkv"
-      };
-
       var videoPath = parsedArgs["dir"];
-      var convertedPath = parsedArgs["list"] ?? Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "converted.txt");
+      var convertedPath =
+        parsedArgs["list"] ??
+        Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "converted.txt");
 
-      var converted =
-        File.Exists(convertedPath) ?
-          (await File.ReadAllLinesAsync(convertedPath)).ToList() :
-          new List<string>();
+      Converted =
+          File.Exists(convertedPath) ?
+            (await File.ReadAllLinesAsync(convertedPath)).ToList() :
+            new List<string>();
 
       var files =
         new DirectoryInfo(videoPath)
           .GetFiles()
           .Where(file => !file.Name.Contains(".tmp"))
-          .Where(file => !converted.Contains(file.FullName));
+          .Where(file => !Converted.Contains(file.FullName));
 
       foreach (var file in files)
       {
-        PrintConverted(converted);
+        PrintConverted(Converted);
 
         var name = Path.GetFileNameWithoutExtension(file.Name);
         var directoryName = file.DirectoryName;
         var extension =
-          extensionsToKeep.Contains(file.Extension) ? file.Extension : ".mp4";
+          ExtensionsToKeep.Contains(file.Extension) ? file.Extension : ".mp4";
 
         var tmpName = $"{directoryName}/{name}.tmp{extension}";
         var newName = $"{directoryName}/{name}{extension}";
@@ -122,22 +114,37 @@ namespace recursive_file_convert
           file.FullName,
           tmpName,
           (progress, totalTime) =>
-          {
-            ClearCurrentLine();
+              {
+                ClearCurrentLine();
 
-            var convertedPercentage = (progress / totalTime) * 100;
-            var converting = $"{file.FullName} - {convertedPercentage.ToString("0.00")}% - {progress}";
-            Console.WriteLine(converting);
-          }
-        );
+                var convertedPercentage = (progress / totalTime) * 100;
+                var converting = $"{file.FullName} - {convertedPercentage.ToString("0.00")}% - {progress}";
+                Console.WriteLine(converting);
+              }
+            );
 
-        converted.Add(file.FullName);
+        Converted.Add(file.FullName);
         // Because if it's not part of the extensions to keep it should be removed
         File.Delete(file.FullName);
         File.Move(tmpName, newName, true);
       }
 
-      await File.WriteAllLinesAsync(convertedPath, converted);
+      await File.WriteAllLinesAsync(convertedPath, Converted);
+    }
+
+
+    static void ClearCurrentLine()
+    {
+      var debug = Environment.GetEnvironmentVariable("DEBUG");
+
+
+      if (debug != "true")
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
+
+      Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
+
+      if (debug != "true")
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
   }
 }
