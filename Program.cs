@@ -21,6 +21,9 @@ namespace recursive_file_convert
       Console.WriteLine($"Converted:\n{alreadyConverted}\nConverting:\n");
     }
 
+    static string CurrentTmp { get; set; }
+    static string ConvertedPath { get; set; }
+
     // List of extensions that don't get converted to MP4
     // If th file is not any of these it will be converted to MP4
     static List<string> ExtensionsToKeep { get; } = new List<string> {
@@ -65,11 +68,6 @@ namespace recursive_file_convert
       }
     }
 
-    static void OnQuit(object sender, ConsoleCancelEventArgs args)
-    {
-      Console.WriteLine("Quit");
-    }
-
     static async Task Main(string[] args)
     {
       if (args.Contains("--help"))
@@ -83,13 +81,13 @@ namespace recursive_file_convert
       var parsedArgs = ParseArgs(args);
 
       var videoPath = parsedArgs["dir"];
-      var convertedPath =
+      ConvertedPath =
         parsedArgs["list"] ??
         Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "converted.txt");
 
       Converted =
-          File.Exists(convertedPath) ?
-            (await File.ReadAllLinesAsync(convertedPath)).ToList() :
+          File.Exists(ConvertedPath) ?
+            (await File.ReadAllLinesAsync(ConvertedPath)).ToList() :
             new List<string>();
 
       var files =
@@ -107,12 +105,12 @@ namespace recursive_file_convert
         var extension =
           ExtensionsToKeep.Contains(file.Extension) ? file.Extension : ".mp4";
 
-        var tmpName = $"{directoryName}/{name}.tmp{extension}";
+        CurrentTmp = $"{directoryName}/{name}.tmp{extension}";
         var newName = $"{directoryName}/{name}{extension}";
 
         await Ffmpeg.Convert(
           file.FullName,
-          tmpName,
+          CurrentTmp,
           (progress, totalTime) =>
               {
                 ClearCurrentLine();
@@ -126,10 +124,20 @@ namespace recursive_file_convert
         Converted.Add(file.FullName);
         // Because if it's not part of the extensions to keep it should be removed
         File.Delete(file.FullName);
-        File.Move(tmpName, newName, true);
+        File.Move(CurrentTmp, newName, true);
+        await SaveConverted();
       }
+    }
 
-      await File.WriteAllLinesAsync(convertedPath, Converted);
+    static async Task SaveConverted()
+    {
+      await File.WriteAllLinesAsync(ConvertedPath, Converted);
+    }
+
+    static async void OnQuit(object sender, ConsoleCancelEventArgs args)
+    {
+      File.Delete(CurrentTmp);
+      await SaveConverted();
     }
 
 
