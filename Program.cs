@@ -91,39 +91,58 @@ namespace recursive_file_convert
             new List<string>();
 
       var files =
-        new DirectoryInfo(videoPath)
-          .GetFiles()
-          .Where(file => !file.Name.Contains(".tmp"))
-          .Where(file => !Converted.Contains(file.FullName));
+        Directory
+          .EnumerateFiles(videoPath, "*.*", SearchOption.AllDirectories)
+          .Where(file => !file.Contains(".tmp"))
+          .Where(file => !Converted.Contains(file))
+          // This is to check weather or not it's a valid media file
+          .Select(file =>
+          {
+            try
+            {
+              FFProbe.Analyse(file);
+              return file;
+            }
+            catch
+            {
+              return null;
+            }
+          })
+          // And then skip the non media files
+          .Where(file => file != null)
+          .ToList();
 
       foreach (var file in files)
       {
         PrintConverted(Converted);
 
-        var name = Path.GetFileNameWithoutExtension(file.Name);
-        var directoryName = file.DirectoryName;
+        var name = Path.GetFileNameWithoutExtension(file);
+        var directoryName = Path.GetDirectoryName(file);
         var extension =
-          ExtensionsToKeep.Contains(file.Extension) ? file.Extension : ".mp4";
-
-        CurrentTmp = $"{directoryName}/{name}.tmp{extension}";
+          ExtensionsToKeep.Contains(Path.GetExtension(file)) ?
+            Path.GetExtension(file) : ".mp4";
         var newName = $"{directoryName}/{name}{extension}";
 
+        // Stored globally do
+        CurrentTmp = $"{directoryName}/{name}.tmp{extension}";
+
+
         await Ffmpeg.Convert(
-          file.FullName,
+          file,
           CurrentTmp,
           (progress, totalTime) =>
               {
                 ClearCurrentLine();
 
                 var convertedPercentage = (progress / totalTime) * 100;
-                var converting = $"{file.FullName} - {convertedPercentage.ToString("0.00")}% - {progress}";
+                var converting = $"{file} - {convertedPercentage.ToString("0.00")}% - {progress}";
                 Console.WriteLine(converting);
               }
             );
 
-        Converted.Add(file.FullName);
+        Converted.Add(file);
         // Because if it's not part of the extensions to keep it should be removed
-        File.Delete(file.FullName);
+        File.Delete(file);
         File.Move(CurrentTmp, newName, true);
         await SaveConverted();
       }
@@ -145,14 +164,9 @@ namespace recursive_file_convert
     {
       var debug = Environment.GetEnvironmentVariable("DEBUG");
 
-
-      if (debug != "true")
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-
+      Console.SetCursorPosition(0, Console.CursorTop - 1);
       Console.Write($"\r{new String(' ', Console.BufferWidth)}\r");
-
-      if (debug != "true")
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
+      Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
   }
 }
